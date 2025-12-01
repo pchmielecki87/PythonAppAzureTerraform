@@ -16,7 +16,7 @@ variables:
   tf_auto_approve: 'true'
   buildConfiguration: 'Release'
 
-stages:ś
+stages:
 - stage: Build
   displayName: Build Python app
   jobs:
