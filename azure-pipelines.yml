@@ -61,7 +61,7 @@ stages:
     - task: AzureCLI@2
       displayName: 'TF init'
       inputs:
-        azureSubscription: 'AdoServiceConnection'
+        azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
         workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
         scriptLocation: inlineScript
@@ -71,7 +71,7 @@ stages:
     - task: AzureCLI@2
       displayName: 'TF validate'
       inputs:
-        azureSubscription: 'AdoServiceConnection'
+        azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
         workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
         scriptLocation: inlineScript
@@ -81,7 +81,7 @@ stages:
     - task: AzureCLI@2
       displayName: 'TF plan'
       inputs:
-        azureSubscription: 'AdoServiceConnection'
+        azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
         workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
         scriptLocation: inlineScript
@@ -108,7 +108,7 @@ stages:
     # - task: AzureCLI@2
     #   displayName: 'TF apply'
     #   inputs:
-    #     azureSubscription: 'AdoServiceConnection'
+    #     azureSubscription: 'azure-devops-serviceconnection'
     #     scriptType: bash
     #     workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
     #     scriptLocation: inlineScript
