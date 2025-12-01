@@ -16,6 +16,7 @@ variables:
   tf_auto_approve: 'true'
   buildConfiguration: 'Release'
 
+# BUILD AND CREATE ZIP ARTIFACT
 stages:
 - stage: Build
   displayName: Build Python app
@@ -41,6 +42,7 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/shopping-app.zip
       artifact: $(artifactName)
 
+# TERRAFORM
 - stage: Terraform
   displayName: Terraform (init + plan + optional apply)
   dependsOn: Build
@@ -62,16 +64,25 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           cd $(terraform_working_dir)
-          terraform init -input=false
+          terraform init -input=false \
+            -backend-config="subscription_id=$(subscriptionId)" \
+            -backend-config="tenant_id=$(tenantId)" \
+            -backend-config="client_id=$(servicePrincipalId)" \
+            -backend-config="client_secret=$(servicePrincipalKey)"
     - task: AzureCLI@2
       displayName: 'Terraform plan (always)'
+      
       inputs:
         azureSubscription: $(azureSubscription)
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
           cd $(terraform_working_dir)
-          terraform plan -out=plan.out -input=false
+          terraform plan -out=plan.out \
+            -var "subscription_id=$(subscriptionId)" \
+            -var "tenant_id=$(tenantId)" \
+            -var "client_id=$(servicePrincipalId)" \
+            -var "client_secret=$(servicePrincipalKey)"
       continueOnError: false
     # Apply step is conditional — runs only when variable tf_apply is 'true'
     - task: AzureCLI@2
@@ -89,6 +100,7 @@ stages:
             terraform apply plan.out
           fi
 
+# DEPLOY
 - stage: Deploy
   displayName: Deploy to Azure Web App
   dependsOn: Terraform
