@@ -6,8 +6,8 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name  = "tfstate-techbrain-modules"
-    storage_account_name = "tfstatetechbrainmodules"
+    resource_group_name  = "python-terraform-ado"
+    storage_account_name = "tfstateforpythonapp"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
   }
@@ -15,9 +15,4 @@ terraform {
 
 provider "azurerm" {
   features {}
-
-  subscription_id = var.subscription_id
-  tenant_id       = var.tenant_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
 }
