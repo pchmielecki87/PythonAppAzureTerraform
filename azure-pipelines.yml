@@ -87,7 +87,6 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           terraform plan
-        continueOnError: false
     
       # Apply step is conditional — runs only when variable tf_apply is 'true'
     - task: AzureCLI@2
