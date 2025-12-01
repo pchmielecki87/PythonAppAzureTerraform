@@ -10,13 +10,13 @@ variables:
   pythonVersion: '3.11'
   artifactName: 'shopping-drop'
   terraform_working_dir: 'terraform'
-  azureSubscription: 'AzureServiceConnection' # replace with your service connection name
-  resourceGroup: 'shopdemo-rg'                # terraform will create if not exists
-  tf_apply: 'false'                           # set true to run terraform apply in pipeline
-  tf_auto_approve: 'true'                     # if true and tf_apply=true, will auto-approve apply
+  azureSubscription: 'azure-devops-serviceconnection'
+  resourceGroup: 'shopdemo-rg'
+  tf_apply: 'false'
+  tf_auto_approve: 'true'
   buildConfiguration: 'Release'
 
-stages:
+stages:ś
 - stage: Build
   displayName: Build Python app
   jobs:
