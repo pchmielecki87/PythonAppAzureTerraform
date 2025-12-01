@@ -52,39 +52,44 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - checkout: self
+
     - task: TerraformInstaller@0
-      displayName: Install Terraform
+      displayName: 'TF install'
       inputs:
-        terraformVersion: '1.5.7'
+        terraformVersion: 'latest'
+    
     - task: AzureCLI@2
-      displayName: 'Terraform init'
+      displayName: 'TF init'
       inputs:
-        azureSubscription: $(azureSubscription)
+        azureSubscription: 'AdoServiceConnection'
         scriptType: bash
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
         scriptLocation: inlineScript
         inlineScript: |
-          cd $(terraform_working_dir)
-          terraform init -input=false \
-            -backend-config="subscription_id=$(subscriptionId)" \
-            -backend-config="tenant_id=$(tenantId)" \
-            -backend-config="client_id=$(servicePrincipalId)" \
-            -backend-config="client_secret=$(servicePrincipalKey)"
+          terraform init
+
     - task: AzureCLI@2
-      displayName: 'Terraform plan (always)'
-      
+      displayName: 'TF validate'
       inputs:
-        azureSubscription: $(azureSubscription)
+        azureSubscription: 'AdoServiceConnection'
         scriptType: bash
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
         scriptLocation: inlineScript
         inlineScript: |
-          cd $(terraform_working_dir)
-          terraform plan -out=plan.out \
-            -var "subscription_id=$(subscriptionId)" \
-            -var "tenant_id=$(tenantId)" \
-            -var "client_id=$(servicePrincipalId)" \
-            -var "client_secret=$(servicePrincipalKey)"
-      continueOnError: false
-    # Apply step is conditional — runs only when variable tf_apply is 'true'
+          terraform validate
+
+    - task: AzureCLI@2
+      displayName: 'TF plan'
+      inputs:
+        azureSubscription: 'AdoServiceConnection'
+        scriptType: bash
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
+        scriptLocation: inlineScript
+        inlineScript: |
+          terraform plan
+        continueOnError: false
+    
+      # Apply step is conditional — runs only when variable tf_apply is 'true'
     - task: AzureCLI@2
       displayName: 'Terraform apply (conditional)'
       condition: eq(variables['tf_apply'], 'true')
@@ -99,6 +104,16 @@ stages:
           else
             terraform apply plan.out
           fi
+
+    # - task: AzureCLI@2
+    #   displayName: 'TF apply'
+    #   inputs:
+    #     azureSubscription: 'AdoServiceConnection'
+    #     scriptType: bash
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
+    #     scriptLocation: inlineScript
+    #     inlineScript: |
+    #       terraform apply --auto-approve
 
 # DEPLOY
 - stage: Deploy
