@@ -12,7 +12,7 @@ variables:
   terraform_working_dir: 'terraform'
   azureSubscription: 'azure-devops-serviceconnection'
   resourceGroup: 'shopdemo-rg'
-  tf_apply: 'false'
+  tf_apply: 'true'
   tf_auto_approve: 'true'
   buildConfiguration: 'Release'
 
@@ -63,7 +63,7 @@ stages:
       inputs:
         azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
           terraform init
@@ -73,7 +73,7 @@ stages:
       inputs:
         azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
           terraform validate
@@ -83,7 +83,7 @@ stages:
       inputs:
         azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
           terraform plan
@@ -94,8 +94,9 @@ stages:
       displayName: 'Terraform apply (conditional)'
       condition: eq(variables['tf_apply'], 'true')
       inputs:
-        azureSubscription: $(azureSubscription)
+        azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
           cd $(terraform_working_dir)
@@ -104,16 +105,6 @@ stages:
           else
             terraform apply plan.out
           fi
-
-    # - task: AzureCLI@2
-    #   displayName: 'TF apply'
-    #   inputs:
-    #     azureSubscription: 'azure-devops-serviceconnection'
-    #     scriptType: bash
-    #     workingDirectory: '$(System.DefaultWorkingDirectory)/Azure/Azure-Sandbox/3a-pipeline'
-    #     scriptLocation: inlineScript
-    #     inlineScript: |
-    #       terraform apply --auto-approve
 
 # DEPLOY
 - stage: Deploy
