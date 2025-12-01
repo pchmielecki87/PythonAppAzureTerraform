@@ -1,0 +1,114 @@
+################################################################################
+# Stage 1 - Build Python app
+# Stage 2 - Terraform init + plan + (optional) apply
+# Stage 3 - Deploy Python app to Azure AppService
+################################################################################
+trigger:
+  - main
+
+variables:
+  pythonVersion: '3.11'
+  artifactName: 'shopping-drop'
+  terraform_working_dir: 'terraform'
+  azureSubscription: 'AzureServiceConnection' # replace with your service connection name
+  resourceGroup: 'shopdemo-rg'                # terraform will create if not exists
+  tf_apply: 'false'                           # set true to run terraform apply in pipeline
+  tf_auto_approve: 'true'                     # if true and tf_apply=true, will auto-approve apply
+  buildConfiguration: 'Release'
+
+stages:
+- stage: Build
+  displayName: Build Python app
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(pythonVersion)'
+    - script: |
+        python -m pip install --upgrade pip
+        pip install -r app/requirements.txt --target ./app/_packages || true
+      displayName: Install dependencies
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: 'app'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/shopping-app.zip'
+        replaceExistingArchive: true
+    - publish: $(Build.ArtifactStagingDirectory)/shopping-app.zip
+      artifact: $(artifactName)
+
+- stage: Terraform
+  displayName: Terraform (init + plan + optional apply)
+  dependsOn: Build
+  jobs:
+  - job: TerraformJob
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - checkout: self
+    - task: TerraformInstaller@0
+      displayName: Install Terraform
+      inputs:
+        terraformVersion: '1.5.7'
+    - task: AzureCLI@2
+      displayName: 'Terraform init'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          cd $(terraform_working_dir)
+          terraform init -input=false
+    - task: AzureCLI@2
+      displayName: 'Terraform plan (always)'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          cd $(terraform_working_dir)
+          terraform plan -out=plan.out -input=false
+      continueOnError: false
+    # Apply step is conditional — runs only when variable tf_apply is 'true'
+    - task: AzureCLI@2
+      displayName: 'Terraform apply (conditional)'
+      condition: eq(variables['tf_apply'], 'true')
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          cd $(terraform_working_dir)
+          if [ "$(tf_auto_approve)" = "true" ]; then
+            terraform apply -input=false -auto-approve plan.out
+          else
+            terraform apply plan.out
+          fi
+
+- stage: Deploy
+  displayName: Deploy to Azure Web App
+  dependsOn: Terraform
+  condition: succeeded()   # run even if Terraform stage skipped; adjust as needed
+  jobs:
+  - deployment: DeployWeb
+    displayName: Deploy Web App
+    environment: 'dev'    # optional: environment for approvals
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: $(artifactName)
+          - task: AzureWebApp@1
+            displayName: 'Deploy ZIP to Web App'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appType: 'webAppLinux'
+              appName: 'shopdemo-app'           # must match the name created by terraform (or use output variable mapping)
+              package: '$(Pipeline.Workspace)/$(artifactName)/shopping-app.zip'
