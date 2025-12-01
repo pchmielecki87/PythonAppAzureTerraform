@@ -86,7 +86,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          terraform plan
+          terraform plan -lock=false
     
       # Apply step is conditional — runs only when variable tf_apply is 'true'
     - task: AzureCLI@2
