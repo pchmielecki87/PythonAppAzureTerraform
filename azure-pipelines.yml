@@ -6,6 +6,16 @@
 trigger:
   - main
 
+parameters:
+  - name: runTerraformApply
+    type: boolean
+    default: false
+    displayName: "Run Terraform Apply?"
+  - name: runTerraformDestroy
+    type: boolean
+    default: false
+    displayName: "Run Terraform Apply?"
+
 variables:
   pythonVersion: '3.11'
   artifactName: 'shopping-drop'
@@ -52,12 +62,12 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - checkout: self
-
+    # 1/6ń/ TF INSTALL
     - task: TerraformInstaller@0
       displayName: 'TF install'
       inputs:
         terraformVersion: 'latest'
-    
+    # 2/6 TF INIT
     - task: AzureCLI@2
       displayName: 'TF init'
       inputs:
@@ -67,17 +77,17 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           terraform init
-
-    # - task: AzureCLI@2
-    #   displayName: 'TF validate'
-    #   inputs:
-    #     azureSubscription: 'azure-devops-serviceconnection'
-    #     scriptType: bash
-    #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-    #     scriptLocation: inlineScript
-    #     inlineScript: |
-    #       terraform validate
-
+    # 3/6 TF VALIDATE
+    - task: AzureCLI@2
+      displayName: 'TF validate'
+      inputs:
+        azureSubscription: 'azure-devops-serviceconnection'
+        scriptType: bash
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        scriptLocation: inlineScript
+        inlineScript: |
+          terraform validate
+    # 4/6 TF PLAN (DRY-RUN)
     - task: AzureCLI@2
       displayName: 'TF plan'
       inputs:
@@ -87,11 +97,11 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           terraform plan -lock=false
-    
-      # Apply step is conditional — runs only when variable tf_apply is 'true'
+    # 5/6 TF APPLY
+    # Apply step is conditional — runs only when variable tf_apply is 'true'
     - task: AzureCLI@2
       displayName: 'Terraform apply (conditional)'
-      condition: eq(variables['tf_apply'], 'true')
+      condition: eq(parameters.runTerraformApply, true)
       inputs:
         azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
@@ -99,21 +109,30 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           cd $(terraform_working_dir)
-          if [ "$(tf_auto_approve)" = "true" ]; then
-            terraform apply -input=false -auto-approve plan.out
-          else
-            terraform apply plan.out
-          fi
+          terraform apply -auto-approve
+      # 6/6 TF DESTROY
+      # Apply step is conditional — runs only when variable tf_apply is 'true'
+    - task: AzureCLI@2
+      displayName: 'Terraform destroy (conditional)'
+      condition: eq(parameters.runTerraformDestroy, true)
+      inputs:
+        azureSubscription: 'azure-devops-serviceconnection'
+        scriptType: bash
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        scriptLocation: inlineScript
+        inlineScript: |
+          cd $(terraform_working_dir)
+          terraform destroy -auto-approve
 
 # DEPLOY
 - stage: Deploy
   displayName: Deploy to Azure Web App
   dependsOn: Terraform
-  condition: succeeded()   # run even if Terraform stage skipped; adjust as needed
+  condition: succeeded()
   jobs:
   - deployment: DeployWeb
     displayName: Deploy Web App
-    environment: 'dev'    # optional: environment for approvals
+    environment: 'dev'
     pool:
       vmImage: 'ubuntu-latest'
     strategy:
