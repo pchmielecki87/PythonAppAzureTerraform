@@ -10,11 +10,15 @@ parameters:
   - name: runTerraformApply
     type: boolean
     default: false
-    displayName: "Run Terraform Apply?"
+    displayName: "Run Terraform apply"
   - name: runTerraformDestroy
     type: boolean
     default: false
-    displayName: "Run Terraform Apply?"
+    displayName: "Run Terraform destroy"
+  - name: deployApp
+    type: boolean
+    default: false
+    displayName: "Deploy app?"
 
 variables:
   pythonVersion: '3.11'
@@ -54,10 +58,10 @@ stages:
 
 # TERRAFORM
 - stage: Terraform
-  displayName: Terraform (init + plan + optional apply)
+  displayName: Terraform
   dependsOn: Build
   jobs:
-  - job: TerraformJob
+  - job: Terraform
     pool:
       vmImage: 'ubuntu-latest'
     steps:
@@ -127,9 +131,9 @@ stages:
 - stage: Deploy
   displayName: Deploy to Azure Web App
   dependsOn: Terraform
-  condition: succeeded()
+  condition: eq('${{ parameters.deployApp }}', 'true')
   jobs:
-  - deployment: DeployWeb
+  - deployment: Deploy
     displayName: Deploy Web App
     environment: 'dev'
     pool:
