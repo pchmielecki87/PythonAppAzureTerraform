@@ -48,6 +48,6 @@ output "app_default_site_hostname" {
   value = azurerm_app_service.app.default_site_hostname
 }
 
-output "app_insights_instrumentation_key" {
-  value = azurerm_application_insights.ai.instrumentation_key
-}
+# output "app_insights_instrumentation_key" {
+#   value = azurerm_application_insights.ai.instrumentation_key
+# }
