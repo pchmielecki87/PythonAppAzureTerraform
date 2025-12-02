@@ -100,7 +100,7 @@ stages:
     # Apply step is conditional — runs only when variable tf_apply is 'true'
     - task: AzureCLI@2
       displayName: 'Terraform apply (conditional)'
-      condition: eq(parameters.runTerraformApply, true)
+      condition: eq('${{ parameters.runTerraformApply }}', 'true')
       inputs:
         azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
@@ -113,7 +113,7 @@ stages:
       # Apply step is conditional — runs only when variable tf_apply is 'true'
     - task: AzureCLI@2
       displayName: 'Terraform destroy (conditional)'
-      condition: eq(parameters.runTerraformDestroy, true)
+      condition: eq('${{ parameters.runTerraformDestroy }}', 'true')
       inputs:
         azureSubscription: 'azure-devops-serviceconnection'
         scriptType: bash
