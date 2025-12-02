@@ -12,7 +12,7 @@ variables:
   terraform_working_dir: 'terraform'
   azureSubscription: 'azure-devops-serviceconnection'
   resourceGroup: 'shopdemo-rg'
-  tf_apply: 'true'
+  tf_apply: 'false'
   tf_auto_approve: 'true'
   buildConfiguration: 'Release'
 
