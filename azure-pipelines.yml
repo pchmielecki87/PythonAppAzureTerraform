@@ -62,9 +62,8 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - checkout: self
-    # 1/6ń/ TF INSTALL
-    - task: TerraformInstaller@0
-      displayName: 'TF install'
+    # 1/6 TF INSTALL
+    - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
     # 2/6 TF INIT
