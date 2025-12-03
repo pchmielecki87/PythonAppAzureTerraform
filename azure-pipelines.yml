@@ -109,9 +109,9 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          terraform apply -auto-approve
-      # 6/6 TF DESTROY
-      # Apply step is conditional
+          terraform apply -lock=false -auto-approve
+    # 6/6 TF DESTROY
+    # Apply step is conditional
     - task: AzureCLI@2
       displayName: 'Terraform destroy (conditional)'
       condition: eq('${{ parameters.runTerraformDestroy }}', 'true')
@@ -121,7 +121,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          terraform destroy -auto-approve
+          terraform destroy -lock=false -auto-approve
 
 # DEPLOY
 - stage: Deploy
