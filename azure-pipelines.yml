@@ -13,7 +13,7 @@ parameters:
     displayName: "Run Terraform apply"
   - name: runTerraformDestroy
     type: boolean
-    default: false
+    default: true
     displayName: "Run Terraform destroy"
   - name: deployApp
     type: boolean
