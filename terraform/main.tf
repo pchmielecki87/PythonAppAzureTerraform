@@ -1,9 +1,11 @@
+## RG ##################################################################
 resource "azurerm_resource_group" "rg" {
   name     = var.rg_name
   location = var.location
   tags     = var.tags
 }
 
+## WEBAPP ##################################################################
 resource "azurerm_service_plan" "asp" {
   name                = "${var.prefix}-asp"
   location            = azurerm_resource_group.rg.location
@@ -12,25 +14,14 @@ resource "azurerm_service_plan" "asp" {
   sku_name            = "F1" # Free tier App Service Plan
 }
 
-resource "azurerm_log_analytics_workspace" "law" {
-  name                = "${var.prefix}-law"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+# resource "azurerm_log_analytics_workspace" "law" {
+#   name                = "${var.prefix}-law"
+#   location            = azurerm_resource_group.rg.location
+#   resource_group_name = azurerm_resource_group.rg.name
 
-  sku               = "Free"
-  retention_in_days = 7 # Free SKU max retention is 7 days
-}
-
-resource "azurerm_application_insights" "ai" {
-  name                = "${var.prefix}-ai"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  application_type    = "web"
-  workspace_id        = azurerm_log_analytics_workspace.law.id
-  # retention_in_days optional
-
-  depends_on = [azurerm_log_analytics_workspace.law]
-}
+#   sku               = "Free"
+#   retention_in_days = 7 # Free SKU max retention is 7 days
+# }
 
 resource "azurerm_linux_web_app" "app" {
   name                = "${var.prefix}-app"
@@ -54,5 +45,26 @@ resource "azurerm_linux_web_app" "app" {
 
   tags = var.tags
 
-  depends_on = [azurerm_service_plan.asp]
+  depends_on = [azurerm_service_plan.asp, azurerm_application_insights.ai]
+}
+
+## AI ##################################################################
+
+resource "azurerm_application_insights" "ai" {
+  name                = "${var.prefix}-ai"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  application_type    = "web"
+  workspace_id        = azurerm_log_analytics_workspace.law.id
+  # retention_in_days optional
+
+  # depends_on = [azurerm_log_analytics_workspace.law]
+}
+
+output "instrumentation_key" {
+  value = azurerm_application_insights.ai.instrumentation_key
+}
+
+output "app_id" {
+  value = azurerm_application_insights.ai.app_id
 }
