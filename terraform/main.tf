@@ -12,13 +12,24 @@ resource "azurerm_service_plan" "asp" {
   sku_name = "F1"   # Free tier App Service Plan
 }
 
-resource "azurerm_application_insights" "ai" {
-  name                = "${var.prefix}-ai"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  application_type    = "web"
-  # retention_in_days optional
+resource "azurerm_log_analytics_workspace" "law" {
+  name                = "workspace-test"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
 }
+
+# resource "azurerm_application_insights" "ai" {
+#   name                = "${var.prefix}-ai"
+#   location            = azurerm_resource_group.rg.location
+#   resource_group_name = azurerm_resource_group.rg.name
+#   application_type    = "web"
+#   workspace_id        = azurerm_log_analytics_workspace.law.id
+#   # retention_in_days optional
+
+#   depends_on = [azurerm_log_analytics_workspace.law]
+# }
 
 resource "azurerm_linux_web_app" "app" {
   name                = "${var.prefix}-app"
