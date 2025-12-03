@@ -28,9 +28,6 @@ resource "azurerm_app_service" "app" {
 
   site_config {
     linux_fx_version = "PYTHON|3.11"
-    # startup command, use gunicorn
-    # If you want to use default startup detection, remove startup_command
-    #startup_command = "gunicorn --bind 0.0.0.0 --timeout 600 app:app"
     always_on = false
   }
 
@@ -43,11 +40,3 @@ resource "azurerm_app_service" "app" {
 
   tags = var.tags
 }
-
-output "app_default_site_hostname" {
-  value = azurerm_app_service.app.default_site_hostname
-}
-
-# output "app_insights_instrumentation_key" {
-#   value = azurerm_application_insights.ai.instrumentation_key
-# }

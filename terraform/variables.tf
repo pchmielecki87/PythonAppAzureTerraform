@@ -17,6 +17,6 @@ variable "tags" {
   type    = map(string)
   default = {
     project = "shopping-list-demo"
-    owner   = "devops"
+    environment   = "dev"
   }
 }
