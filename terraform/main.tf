@@ -20,11 +20,11 @@ resource "azurerm_application_insights" "ai" {
   # retention_in_days optional
 }
 
-resource "azurerm_app_service" "app" {
+resource "azurerm_linux_web_app" "app" {
   name                = "${var.prefix}-app"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_service_plan.asp.id
+  service_plan_id = azurerm_service_plan.asp.id
 
   site_config {
     linux_fx_version = "PYTHON|3.11"
@@ -37,6 +37,8 @@ resource "azurerm_app_service" "app" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = "InstrumentationKey=${azurerm_application_insights.ai.instrumentation_key}"
     "PYTHON_VERSION"                     = "3.11"
   }
-
+  
   tags = var.tags
+
+  depends_on = [azurerm_service_plan.asp]
 }
