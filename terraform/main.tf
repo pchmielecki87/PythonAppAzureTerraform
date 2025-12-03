@@ -60,4 +60,3 @@ resource "azurerm_application_insights" "ai" {
 
   # depends_on = [azurerm_log_analytics_workspace.law]
 }
-ś
