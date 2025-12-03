@@ -26,8 +26,6 @@ variables:
   terraform_working_dir: 'terraform'
   azureSubscription: 'azure-devops-serviceconnection'
   resourceGroup: 'shopdemo-rg'
-  tf_apply: 'false'
-  tf_auto_approve: 'true'
   buildConfiguration: 'Release'
 
 # BUILD AND CREATE ZIP ARTIFACT
@@ -101,7 +99,7 @@ stages:
         inlineScript: |
           terraform plan -lock=false
     # 5/6 TF APPLY
-    # Apply step is conditional — runs only when variable tf_apply is 'true'
+    # Apply step is conditional
     - task: AzureCLI@2
       displayName: 'Terraform apply (conditional)'
       condition: eq('${{ parameters.runTerraformApply }}', 'true')
@@ -111,10 +109,9 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          cd $(terraform_working_dir)
           terraform apply -auto-approve
       # 6/6 TF DESTROY
-      # Apply step is conditional — runs only when variable tf_apply is 'true'
+      # Apply step is conditional
     - task: AzureCLI@2
       displayName: 'Terraform destroy (conditional)'
       condition: eq('${{ parameters.runTerraformDestroy }}', 'true')
@@ -124,7 +121,6 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          cd $(terraform_working_dir)
           terraform destroy -auto-approve
 
 # DEPLOY
