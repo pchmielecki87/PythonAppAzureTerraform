@@ -9,16 +9,16 @@ trigger:
 parameters:
   - name: runTerraformApply
     type: boolean
-    default: false
-    displayName: "Run Terraform apply"
+    default: trie
+    displayName: "Terraform apply"
   - name: runTerraformDestroy
     type: boolean
-    default: true
-    displayName: "Run Terraform destroy"
+    default: false
+    displayName: "Terraform destroy"
   - name: deployApp
     type: boolean
     default: false
-    displayName: "Deploy app?"
+    displayName: "Deploy app"
 
 variables:
   pythonVersion: '3.11'
