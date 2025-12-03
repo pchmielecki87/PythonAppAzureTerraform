@@ -14,9 +14,9 @@ variable "location" {
 }
 
 variable "tags" {
-  type    = map(string)
+  type = map(string)
   default = {
-    project = "shopping-list-demo"
-    environment   = "dev"
+    project     = "shopping-list-demo"
+    environment = "dev"
   }
 }

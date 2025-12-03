@@ -8,8 +8,8 @@ resource "azurerm_service_plan" "asp" {
   name                = "${var.prefix}-asp"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  os_type = "Linux"
-  sku_name = "F1"   # Free tier App Service Plan
+  os_type             = "Linux"
+  sku_name            = "F1" # Free tier App Service Plan
 }
 
 resource "azurerm_log_analytics_workspace" "law" {
@@ -17,8 +17,8 @@ resource "azurerm_log_analytics_workspace" "law" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
-  sku                 = "Free"
-  retention_in_days   = 7   # Free SKU max retention is 7 days
+  sku               = "Free"
+  retention_in_days = 7 # Free SKU max retention is 7 days
 }
 
 resource "azurerm_application_insights" "ai" {
@@ -36,7 +36,7 @@ resource "azurerm_linux_web_app" "app" {
   name                = "${var.prefix}-app"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  service_plan_id = azurerm_service_plan.asp.id
+  service_plan_id     = azurerm_service_plan.asp.id
 
   site_config {
     always_on = false
@@ -46,12 +46,12 @@ resource "azurerm_linux_web_app" "app" {
   }
 
   app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE"           = "1"
-    "APPINSIGHTS_INSTRUMENTATIONKEY"     = azurerm_application_insights.ai.instrumentation_key
+    "WEBSITE_RUN_FROM_PACKAGE"              = "1"
+    "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.ai.instrumentation_key
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = "InstrumentationKey=${azurerm_application_insights.ai.instrumentation_key}"
-    "PYTHON_VERSION"                     = "3.11"
+    "PYTHON_VERSION"                        = "3.11"
   }
-  
+
   tags = var.tags
 
   depends_on = [azurerm_service_plan.asp]
