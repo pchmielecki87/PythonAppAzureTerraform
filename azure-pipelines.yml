@@ -98,7 +98,6 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           terraform plan -lock=false
-          terraform state push errored.tfstate
     # 5/6 TF APPLY
     # Apply step is conditional
     - task: AzureCLI@2
