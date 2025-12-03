@@ -9,7 +9,7 @@ trigger:
 parameters:
   - name: runTerraformApply
     type: boolean
-    default: true
+    default: false
     displayName: "Terraform apply"
   - name: runTerraformDestroy
     type: boolean
@@ -17,7 +17,7 @@ parameters:
     displayName: "Terraform destroy"
   - name: deployApp
     type: boolean
-    default: false
+    default: true
     displayName: "Deploy app"
 
 variables:
