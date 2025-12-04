@@ -41,6 +41,7 @@ resource "azurerm_linux_web_app" "app" {
     "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.ai.instrumentation_key
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = "InstrumentationKey=${azurerm_application_insights.ai.instrumentation_key}"
     "PYTHON_VERSION"                        = "3.11"
+    "KEYVAULT_URI"                          = data.azurerm_key_vault.kv.vault_uri
   }
 
   tags = var.tags
