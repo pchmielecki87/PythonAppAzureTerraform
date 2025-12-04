@@ -1,9 +1,3 @@
-Here is a **clean, modern, emoji-rich README.md** describing your repo, architecture, technologies, and pipeline flow — including **ASCII diagrams** and **architecture diagrams**.
-
-You can copy-paste this directly into your `README.md`.
-
----
-
 # 🛒 Azure Python Web App + Terraform + Azure DevOps
 
 **Fully automated deployment of a Python Flask web app with Azure App Service, Key Vault integration, Application Insights, and Azure DevOps multi-stage pipeline.**
