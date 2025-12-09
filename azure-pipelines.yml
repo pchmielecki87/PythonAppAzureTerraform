@@ -28,6 +28,7 @@ variables:
   resourceGroup: 'shopdemo-rg'
   buildConfiguration: 'Release'
   test2: 'test2' # to be printed in pipeline
+  deploy: 'blue' # or set it to green
 
 # BUILD AND CREATE ZIP ARTIFACT
 stages:
@@ -55,13 +56,11 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/shopping-app.zip
       artifact: $(artifactName)
 
-#TODO save artifact in Azure Artifacts
-
-# PRINT VALUES IN BASH
+# PRINT VARIABLES AND USE TEMPLATE
 - stage: Print
-  displayName: Print variables values
+  displayName: Print variables and use template
   jobs:
-  - job: Terraform
+  - job: Print
     displayName: Print variables values
     pool:
       vmImage: 'ubuntu-latest'
@@ -69,6 +68,7 @@ stages:
       - group: 'Local secrets group'
       - group: 'KV variable group'
     steps:
+    # print variables
     - task: Bash@3
       inputs:
         targetType: 'inline'
@@ -76,16 +76,10 @@ stages:
           echo "Variable test1 printed from ADO libabry group: $(test1)"
           echo "Variable test2 printed from pipeline variables: $(test2)"
           echo "Variable secret1 printed from KV variables: $(secret1)"
-  - job: DeployBlue
-    steps:
-    - template: templates/deploy-strategy-template.yml
+    # use template
+    - template: templates/blue-green-template.yml
       parameters:
-        deploy: 'blue' # Jawnie ustawiamy na 'blue'
-    - script: |
-        echo "Deploying to: $(targetEnvironment)"
-        echo "Service Name: $(serviceName)"
-        echo "Connection: $(dbConnectionString)"
-      displayName: 'Wypisz Aktywne Zmienne (BLUE)'
+        deployTarget: ${{ variables['deploy'] }}
 
 # TERRAFORM
 - stage: Terraform

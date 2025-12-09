@@ -1,0 +1,26 @@
+parameters:
+  - name: deployTarget
+    type: string
+    default: ''
+    values:
+      - blue
+      - green
+
+jobs:
+  - job: DeployBlue
+    displayName: "Deploy to BLUE environment"
+    condition: eq('${{ parameters.deployTarget }}', 'blue')
+    steps:
+      - script: |
+          echo "BLUE deployment selected"
+          echo "Deploying to BLUE..."
+        displayName: "Print BLUE"
+
+  - job: DeployGreen
+    displayName: "Deploy to GREEN environment"
+    condition: eq('${{ parameters.deployTarget }}', 'green')
+    steps:
+      - script: |
+          echo "GREEN deployment selected"
+          echo "Deploying to GREEN..."
+        displayName: "Print GREEN"
