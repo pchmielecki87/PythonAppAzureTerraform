@@ -54,6 +54,9 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/shopping-app.zip
       artifact: $(artifactName)
 
+#TODO save artifact in Azure Artifacts
+#TODO print secrets from KV
+
 # PRINT VALUES IN BASH
 - stage: Print
   displayName: Print values in Bash
