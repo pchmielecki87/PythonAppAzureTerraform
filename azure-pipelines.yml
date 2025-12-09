@@ -55,7 +55,7 @@ stages:
       artifact: $(artifactName)
 
 # PRINT VALUES IN BASH
-- stage: Deploy
+- stage: Print
   displayName: Print values in Bash
   jobs:
   - job: Terraform
