@@ -56,6 +56,7 @@ stages:
 
 #TODO save artifact in Azure Artifacts
 #TODO print secrets from KV
+#TODO add templates
 
 # PRINT VALUES IN BASH
 - stage: Print
