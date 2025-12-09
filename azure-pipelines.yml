@@ -72,8 +72,9 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          echo "Print variable from pipeline named group: $(group)"
           echo 'Print variables from local variable group'
-          echo Variable maven-feed-package-rw value is '$(maven-feed-package-rw)'
+          echo "Variable maven-feed-package-rw value is $(maven-feed-package-rw)"
 
 # TERRAFORM
 - stage: Terraform
