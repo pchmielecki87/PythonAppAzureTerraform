@@ -27,6 +27,7 @@ variables:
   azureSubscription: 'azure-devops-serviceconnection'
   resourceGroup: 'shopdemo-rg'
   buildConfiguration: 'Release'
+  group: Local secrets group
 
 # BUILD AND CREATE ZIP ARTIFACT
 stages:
@@ -71,8 +72,8 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          # Write your commands here
-          echo 'Hello world'
+          echo 'Print variables from local variable group'
+          echo 'Variable maven-feed-package-rw value is: $(maven-feed-package-rw)'
 
 # TERRAFORM
 - stage: Terraform
