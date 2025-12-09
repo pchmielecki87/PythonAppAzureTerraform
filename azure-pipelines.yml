@@ -17,7 +17,7 @@ parameters:
     displayName: "Terraform destroy"
   - name: deployApp
     type: boolean
-    default: true
+    default: false
     displayName: "Deploy app"
 
 variables:
@@ -72,7 +72,7 @@ stages:
     - task: AzureCLI@2
       displayName: 'TF init'
       inputs:
-        azureSubscription: 'azure-devops-serviceconnection'
+        azureSubscription: $(azureSubscription)
         scriptType: bash
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
@@ -82,7 +82,7 @@ stages:
     - task: AzureCLI@2
       displayName: 'TF validate'
       inputs:
-        azureSubscription: 'azure-devops-serviceconnection'
+        azureSubscription: $(azureSubscription)
         scriptType: bash
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
@@ -92,7 +92,7 @@ stages:
     - task: AzureCLI@2
       displayName: 'TF plan'
       inputs:
-        azureSubscription: 'azure-devops-serviceconnection'
+        azureSubscription: $(azureSubscription)
         scriptType: bash
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
@@ -104,7 +104,7 @@ stages:
       displayName: 'Terraform apply (conditional)'
       condition: eq('${{ parameters.runTerraformApply }}', 'true')
       inputs:
-        azureSubscription: 'azure-devops-serviceconnection'
+        azureSubscription: $(azureSubscription)
         scriptType: bash
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
@@ -116,7 +116,7 @@ stages:
       displayName: 'Terraform destroy (conditional)'
       condition: eq('${{ parameters.runTerraformDestroy }}', 'true')
       inputs:
-        azureSubscription: 'azure-devops-serviceconnection'
+        azureSubscription: $(azureSubscription)
         scriptType: bash
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
