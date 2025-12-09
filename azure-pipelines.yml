@@ -27,7 +27,6 @@ variables:
   azureSubscription: 'azure-devops-serviceconnection'
   resourceGroup: 'shopdemo-rg'
   buildConfiguration: 'Release'
-  group: 'Local secrets group'
 
 # BUILD AND CREATE ZIP ARTIFACT
 stages:
@@ -67,14 +66,15 @@ stages:
     displayName: Print values in Bash
     pool:
       vmImage: 'ubuntu-latest'
+    variables:
+      - group: 'Local secrets group'
     steps:
     - task: Bash@3
       inputs:
         targetType: 'inline'
         script: |
-          echo "Print variable from pipeline named group: $(group)"
-          echo 'Print variables from local variable group'
-          echo "Variable maven-feed-package-rw value is: $(test1)"
+          echo "Print variable from pipeline named group is: $(group)"
+          echo "Variable test1 value is: $(test1)"
 
 # TERRAFORM
 - stage: Terraform
