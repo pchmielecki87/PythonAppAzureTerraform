@@ -27,7 +27,7 @@ variables:
   azureSubscription: 'azure-devops-serviceconnection'
   resourceGroup: 'shopdemo-rg'
   buildConfiguration: 'Release'
-  group: Local secrets group
+  group: 'Local secrets group'
 
 # BUILD AND CREATE ZIP ARTIFACT
 stages:
