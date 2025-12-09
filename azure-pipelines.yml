@@ -57,7 +57,6 @@ stages:
 
 #TODO save artifact in Azure Artifacts
 #TODO add templates
-#TODO print secrets from KV
 
 # PRINT VALUES IN BASH
 - stage: Print
@@ -69,6 +68,7 @@ stages:
       vmImage: 'ubuntu-latest'
     variables:
       - group: 'Local secrets group'
+      - group: 'KV variable group'
     steps:
     - task: Bash@3
       inputs:
@@ -76,6 +76,7 @@ stages:
         script: |
           echo "Variable test1 printed from ADO libabry group: $(test1)"
           echo "Variable test2 printed from pipeline variables: $(test2)"
+          echo "Variable secret1 printed from KV variables: $(secret1)"
 
 # TERRAFORM
 - stage: Terraform
