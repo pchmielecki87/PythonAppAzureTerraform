@@ -58,7 +58,7 @@ stages:
 
 # PRINT VARIABLES AND USE TEMPLATE
 - stage: Print
-  displayName: Print variables and use template
+  displayName: Print variables
   jobs:
   - job: Print
     displayName: Print variables values
@@ -68,7 +68,6 @@ stages:
       - group: 'Local secrets group'
       - group: 'KV variable group'
     steps:
-    # print variables
     - task: Bash@3
       inputs:
         targetType: 'inline'
@@ -76,7 +75,10 @@ stages:
           echo "Variable test1 printed from ADO libabry group: $(test1)"
           echo "Variable test2 printed from pipeline variables: $(test2)"
           echo "Variable secret1 printed from KV variables: $(secret1)"
-    # use template
+
+- stage: UseTemplate
+  displayName: Use template
+  jobs:
     - template: templates/blue-green-template.yml
       parameters:
         deployTarget: ${{ variables['deploy'] }}
