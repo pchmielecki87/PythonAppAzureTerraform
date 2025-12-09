@@ -6,6 +6,7 @@ parameters:
       - blue
       - green
 
+jobs:
   - job: DeployBlue
     displayName: "Deploy to BLUE environment"
     condition: eq('${{ parameters.deployTarget }}', 'blue')
