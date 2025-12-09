@@ -78,7 +78,7 @@ stages:
           echo "Variable secret1 printed from KV variables: $(secret1)"
   - job: DeployBlue
     steps:
-    - template: deployment-config.yml
+    - template: templates/deploy-strategy-template.yml
       parameters:
         deploy: 'blue' # Jawnie ustawiamy na 'blue'
     - script: |
