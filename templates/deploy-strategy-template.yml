@@ -1,17 +1,10 @@
 parameters:
 - name: deploy
   type: string
-  default: 'green' # Domyślna wartość
-  values:
+  default: 'green' # default value
   - green
   - blue
 
-variables:
-  # --- Konfiguracje Ogólne (Wspólne) ---
-  resourceGroupName: 'my-app-rg'
-  imageTag: 'latest'
-
-  # --- Konfiguracje Warunkowe ---
   # Wartość domyślna dla targetEnvironment (jeśli nie pasuje 'green' ani 'blue')
   targetEnvironment: 'production-default'
 
