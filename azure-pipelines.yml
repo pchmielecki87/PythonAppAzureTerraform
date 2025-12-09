@@ -56,7 +56,6 @@ stages:
       artifact: $(artifactName)
 
 #TODO save artifact in Azure Artifacts
-#TODO add templates
 
 # PRINT VALUES IN BASH
 - stage: Print
@@ -77,6 +76,16 @@ stages:
           echo "Variable test1 printed from ADO libabry group: $(test1)"
           echo "Variable test2 printed from pipeline variables: $(test2)"
           echo "Variable secret1 printed from KV variables: $(secret1)"
+  - job: DeployBlue
+    steps:
+    - template: deployment-config.yml
+      parameters:
+        deploy: 'blue' # Jawnie ustawiamy na 'blue'
+    - script: |
+        echo "Deploying to: $(targetEnvironment)"
+        echo "Service Name: $(serviceName)"
+        echo "Connection: $(dbConnectionString)"
+      displayName: 'Wypisz Aktywne Zmienne (BLUE)'
 
 # TERRAFORM
 - stage: Terraform
