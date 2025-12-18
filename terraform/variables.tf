@@ -1,22 +1,15 @@
 variable "prefix" {
-  type    = string
-  default = "shopdemo"
+  type = string
 }
 
 variable "rg_name" {
-  type    = string
-  default = "shopdemo-rg"
+  type = string
 }
 
 variable "location" {
-  type    = string
-  default = "westeurope"
+  type = string
 }
 
 variable "tags" {
   type = map(string)
-  default = {
-    project     = "shopping-list-demo"
-    environment = "dev"
-  }
 }
