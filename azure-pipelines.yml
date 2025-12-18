@@ -151,7 +151,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          terraform destroy -lock=false -auto-approve
+          terraform destroy -lock=false -auto-approve -var-file="$(System.DefaultWorkingDirectory)/terraform/environment/$(env).tfvars"
 
 # DEPLOY
 - stage: Deploy
