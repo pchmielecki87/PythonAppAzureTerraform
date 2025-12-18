@@ -21,6 +21,7 @@ parameters:
     default: true
 
 variables:
+  env: 'dev' # needed for tfvars
   pythonVersion: '3.11'
   artifactName: 'shopping-drop'
   terraform_working_dir: 'terraform'
@@ -126,7 +127,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          terraform plan -lock=false
+          terraform plan -lock=false -var-file="$(System.DefaultWorkingDirectory)/environment/$(env).tfvars"
     # 5/6 TF APPLY
     # Apply step is conditional
     - task: AzureCLI@2
@@ -138,7 +139,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          terraform apply -lock=false -auto-approve
+          terraform apply -lock=false -auto-approve -var-file="$(System.DefaultWorkingDirectory)/environment/$(env).tfvars"
     # 6/6 TF DESTROY
     # Apply step is conditional
     - task: AzureCLI@2
