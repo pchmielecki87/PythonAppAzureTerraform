@@ -1,15 +1,19 @@
 variable "prefix" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "rg_name" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "location" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "tags" {
-  type = map(string)
+  type    = map(string)
+  default = {}
 }

@@ -59,7 +59,7 @@ resource "azurerm_application_insights" "ai" {
   application_type = "web"
   workspace_id     = azurerm_log_analytics_workspace.law.id
 
-  daily_data_cap_in_gb = 0.1
+  daily_data_cap_in_gb                  = 0.1
   daily_data_cap_notifications_disabled = true
 
   depends_on = [azurerm_log_analytics_workspace.law]
