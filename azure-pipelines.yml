@@ -127,7 +127,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          terraform plan -lock=false -var-file="$(System.DefaultWorkingDirectory)/environment/$(env).tfvars"
+          terraform plan -lock=false -var-file="$(System.DefaultWorkingDirectory)/terraform/environment/$(env).tfvars"
     # 5/6 TF APPLY
     # Apply step is conditional
     - task: AzureCLI@2
@@ -139,7 +139,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         scriptLocation: inlineScript
         inlineScript: |
-          terraform apply -lock=false -auto-approve -var-file="$(System.DefaultWorkingDirectory)/environment/$(env).tfvars"
+          terraform apply -lock=false -auto-approve -var-file="$(System.DefaultWorkingDirectory)/terraform/environment/$(env).tfvars"
     # 6/6 TF DESTROY
     # Apply step is conditional
     - task: AzureCLI@2
