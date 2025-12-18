@@ -14,14 +14,14 @@ resource "azurerm_service_plan" "asp" {
   sku_name            = "F1" # Free tier App Service Plan
 }
 
-# resource "azurerm_log_analytics_workspace" "law" {
-#   name                = "${var.prefix}-law"
-#   location            = azurerm_resource_group.rg.location
-#   resource_group_name = azurerm_resource_group.rg.name
+resource "azurerm_log_analytics_workspace" "law" {
+  name                = "${var.prefix}-law"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 
-#   sku               = "Free"
-#   retention_in_days = 7 # Free SKU max retention is 7 days
-# }
+  sku               = "Free"
+  retention_in_days = 7 # Free SKU max retention is 7 days
+}
 
 resource "azurerm_linux_web_app" "app" {
   name                = "${var.prefix}-app"
@@ -57,7 +57,7 @@ resource "azurerm_application_insights" "ai" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   application_type    = "web"
-  # workspace_id        = azurerm_log_analytics_workspace.law.id
+  workspace_id        = azurerm_log_analytics_workspace.law.id
   # retention_in_days optional
 
   # depends_on = [azurerm_log_analytics_workspace.law]
