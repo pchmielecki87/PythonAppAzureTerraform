@@ -19,8 +19,8 @@ resource "azurerm_log_analytics_workspace" "law" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
-  sku               = "Free"
-  retention_in_days = 7 # Free SKU max retention is 7 days
+  sku               = "PerGB2018" #Free <-- not free anymore
+  retention_in_days = 7
 }
 
 resource "azurerm_linux_web_app" "app" {
@@ -51,14 +51,16 @@ resource "azurerm_linux_web_app" "app" {
 }
 
 ## AI ##################################################################
-
 resource "azurerm_application_insights" "ai" {
   name                = "${var.prefix}-ai"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  application_type    = "web"
-  workspace_id        = azurerm_log_analytics_workspace.law.id
-  # retention_in_days optional
 
-  # depends_on = [azurerm_log_analytics_workspace.law]
+  application_type = "web"
+  workspace_id     = azurerm_log_analytics_workspace.law.id
+
+  daily_data_cap_in_gb = 0.1
+  daily_data_cap_notifications_disabled = true
+
+  depends_on = [azurerm_log_analytics_workspace.law]
 }
