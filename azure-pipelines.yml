@@ -10,15 +10,15 @@ parameters:
   - name: runTerraformApply
     displayName: "Terraform apply"
     type: boolean
-    default: true
+    default: false
   - name: runTerraformDestroy
     displayName: "Terraform destroy"
     type: boolean
-    default: false
+    default: true
   - name: deployApp
     displayName: "Deploy app"
     type: boolean
-    default: true
+    default: false
 
 variables:
   env: 'dev' # needed for tfvars
