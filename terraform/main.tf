@@ -20,7 +20,7 @@ resource "azurerm_log_analytics_workspace" "law" {
   resource_group_name = azurerm_resource_group.rg.name
 
   sku               = "PerGB2018" #Free <-- not free anymore
-  retention_in_days = 7
+  retention_in_days = var.retention_in_days
 }
 
 resource "azurerm_linux_web_app" "app" {

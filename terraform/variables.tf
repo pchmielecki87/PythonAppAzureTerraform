@@ -13,6 +13,11 @@ variable "location" {
   default = null
 }
 
+variable "retention_in_days" {
+  type    = string
+  default = {}
+}
+
 variable "tags" {
   type    = map(string)
   default = {}
