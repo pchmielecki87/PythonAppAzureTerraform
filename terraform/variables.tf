@@ -15,7 +15,7 @@ variable "location" {
 
 variable "retention_in_days" {
   type    = string
-  default = {}
+  default = null
 }
 
 variable "tags" {
