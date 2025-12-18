@@ -8,17 +8,17 @@ trigger:
 
 parameters:
   - name: runTerraformApply
-    type: boolean
-    default: false
     displayName: "Terraform apply"
+    type: boolean
+    default: true
   - name: runTerraformDestroy
-    type: boolean
-    default: false
     displayName: "Terraform destroy"
-  - name: deployApp
     type: boolean
     default: false
+  - name: deployApp
     displayName: "Deploy app"
+    type: boolean
+    default: true
 
 variables:
   pythonVersion: '3.11'
