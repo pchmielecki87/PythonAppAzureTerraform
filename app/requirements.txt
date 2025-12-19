@@ -3,6 +3,5 @@ Flask>=3.0.0
 gunicorn==21.2.0
 
 # Azure Monitor / Application Insights Integration
-opencensus>=0.11.0
-opencensus-ext-azure>=1.1.13
-opencensus-ext-flask>=0.1.2
+opencensus-ext-azure
+opencensus-ext-flask
