@@ -57,32 +57,32 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/shopping-app.zip
       artifact: $(artifactName)
 
-# # PRINT VARIABLES AND USE TEMPLATE
-# - stage: Print
-#   displayName: Print variables
-#   jobs:
-#   - job: Print
-#     displayName: Print variables values
-#     pool:
-#       vmImage: 'ubuntu-latest'
-#     variables:
-#       - group: 'Local secrets group'
-#       - group: 'KV variable group'
-#     steps:
-#     - task: Bash@3
-#       inputs:
-#         targetType: 'inline'
-#         script: |
-#           echo "Variable test1 printed from ADO libabry group: $(test1)"
-#           echo "Variable test2 printed from pipeline variables: $(test2)"
-#           echo "Variable secret1 printed from KV variables: $(secret1)"
+# PRINT VARIABLES AND USE TEMPLATE
+- stage: Print
+  displayName: Print variables
+  jobs:
+  - job: Print
+    displayName: Print variables values
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+      - group: 'Local secrets group'
+      - group: 'KV variable group'
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo "Variable test1 printed from ADO libabry group: $(test1)"
+          echo "Variable test2 printed from pipeline variables: $(test2)"
+          echo "Variable secret1 printed from KV variables: $(secret1)"
 
-# - stage: UseTemplate
-#   displayName: Use template
-#   jobs:
-#     - template: templates/blue-green-template.yml
-#       parameters:
-#         deployTarget: ${{ variables['deploy'] }}
+- stage: UseTemplate
+  displayName: Use template
+  jobs:
+    - template: templates/blue-green-template.yml
+      parameters:
+        deployTarget: ${{ variables['deploy'] }}
 
 # TERRAFORM
 - stage: Terraform
