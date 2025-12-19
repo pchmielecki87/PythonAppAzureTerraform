@@ -1,5 +1,5 @@
 # Web Framework
-Flask>=3.0.0
+Flask==2.2.5
 gunicorn==21.2.0
 
 # Azure Monitor / Application Insights Integration
