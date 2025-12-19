@@ -5,7 +5,6 @@ from flask import Flask, request, redirect, url_for, render_template_string
 from opencensus.ext.azure.log_exporter import AzureLogHandler
 from opencensus.ext.azure.trace_exporter import AzureExporter
 from opencensus.ext.flask.flask_middleware import FlaskMiddleware
-from opencensus.trace.samplers import ProbabilitySampler
 
 app = Flask(__name__)
 
