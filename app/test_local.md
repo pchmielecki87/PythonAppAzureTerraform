@@ -4,7 +4,7 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
-export APPLICATIONINSIGHTS_CONNECTION_STRING="InstrumentationKey=e826256d-d6a1-40c4-a22c-370bb3f797bc"
+export APPLICATIONINSIGHTS_CONNECTION_STRING="InstrumentationKey=00000000-0000-0000-0000-000000000000"
 
 python app.py
 http://localhost:8000
