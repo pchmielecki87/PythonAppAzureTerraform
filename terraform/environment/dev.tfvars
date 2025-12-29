@@ -5,4 +5,5 @@ retention_in_days = 30
 tags = {
   project     = "shopping-list-demo"
   environment = "dev"
+  cicd        = "ado"
 }
