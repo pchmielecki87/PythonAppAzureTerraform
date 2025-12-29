@@ -13,11 +13,12 @@
 │   └── requirements.txt      # Python dependencies
 │
 ├── terraform/
+│   └── terraform/
+│   │  └── dev.tfvars         # Variables values for dev environment
 │   ├── main.tf               # Core resources (App Service, Plan, App Insights)
-│   ├── keyvault.tf           # Key Vault data source (existing KV)
 │   ├── outputs.tf            # Useful Terraform outputs
-│   ├── variables.tf          # Variables for prefix, location, misc
-│   └── backend.tf            # Remote state (Azure Storage)
+│   ├── variables.tf          # Variables declarations for prefix, location, misc
+│   └── data.tf               # Reference existing resources in Azure handled by different TF statefile
 │
 └── azure-pipelines.yaml      # Azure DevOps pipeline (build + terraform + deploy)
 ```
