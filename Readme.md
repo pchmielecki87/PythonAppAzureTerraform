@@ -102,19 +102,19 @@ All Azure resources are **Free tier**:
 │       Azure DevOps Multi-Stage YAML Pipeline                    │
 └─────────────────────────────────────────────────────────────────┘
 
-1️⃣ **Build Stage**
+1️⃣ Build Stage
    - Install Python
    - Install dependencies
    - Package the Flask app (zip)
 
-2️⃣ **Terraform Stage**
+2️⃣ Terraform Stage
    - terraform init
    - terraform plan (always runs)
    - terraform apply (manual “run or skip”)
    - terraform destroy (optional manual flag)
    - unlock state if needed
 
-3️⃣ **Deployment Stage**
+3️⃣ Deployment Stage
    - Retrieve outputs from Terraform
    - Deploy Flask build artifact into Azure App Service
 ```
